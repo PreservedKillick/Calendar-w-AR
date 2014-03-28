@@ -63,21 +63,24 @@ def user_menu(this_user)
   puts "\t'E' to edit an event"
   puts "\t'D' to delete an event"
   puts "\t'S' to display all events or events for a given timeframe"
+  puts "\t'N' to add a note to an event or a to-do"
   puts "\t'M' to return to the main menu"
   user_choice = gets.chomp.upcase
   case user_choice
   when 'A'
     add_event(this_user)
   when 'E'
-      edit_event(this_user)
+    edit_event(this_user)
   when 'D'
-      delete_event(this_user)
+    delete_event(this_user)
   when 'S'
-      sort_events_by_start(this_user)
+    sort_events_by_start(this_user)
+  when 'N'
+    add_note(this_user)
   when 'M'
-      main_menu
+    main_menu
   else
-      puts "Please enter a valid entry"
+    puts "Please enter a valid entry"
   end
 end
 
@@ -357,6 +360,32 @@ def list_event(this_user)
     gets.chomp
   else
     puts 'Invalid input please try again'
+  end
+end
+
+def add_note(this_user)
+  puts "Would you like to add a note to an event ('E') or a to-do ('T')?"
+  choice = gets.chomp.upcase
+  case choice
+  when 'E'
+    this_user.events.each do |event|
+      puts "Events: #{event.description}\n"
+    end
+    puts "\nWhich event would you like to add a note to?"
+    event_choice = gets.chomp.downcase
+    chosen_event = Event.find_by(:description => event_choice)
+    puts "\nEnter your note:\n"
+    note_input = gets.chomp
+    new_note = Note.create({:notabene => note_input, :record_id => chosen_event.id, :record_type => 'event'})
+
+
+  when 'T'
+    this_user.to_dos.each do |to_do|
+      puts "To-do items:
+      \n#{event.description}\n"
+    end
+
+
   end
 end
 
