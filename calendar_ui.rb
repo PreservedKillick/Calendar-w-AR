@@ -376,16 +376,24 @@ def add_note(this_user)
     chosen_event = Event.find_by(:description => event_choice)
     puts "\nEnter your note:\n"
     note_input = gets.chomp
-    new_note = Note.create({:notabene => note_input, :record_id => chosen_event.id, :record_type => 'event'})
-
-
+    new_note =  chosen_event.notes.create({:notabene => note_input})
+    puts "\n#{new_note.notabene} has been added as a note for #{chosen_event.description}\n"
+    gets.chomp
+    user_menu(this_user)
   when 'T'
     this_user.to_dos.each do |to_do|
       puts "To-do items:
       \n#{event.description}\n"
     end
-
-
+    puts "\nWhich to-do would you like to add a note to?"
+    todo_choice = gets.chomp.downcase
+    chosen_todo = ToDo.find_by(:description => todo_choice)
+    puts "\nEnter your note:\n"
+    note_input = gets.chomp
+    new_note = chosen_todo.notes.create({:notabene => note_input})
+    puts "\n#{new_note.notabene} has been added as a note for #{chosen_todo.description}\n"
+    gets.chomp
+    user_menu(this_user)
   end
 end
 
